@@ -13,10 +13,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python scripts/atualizar.py
+      - run: python -u scripts/atualizar.py
       - name: Gravar mudanças
         run: |
           git config user.name "atualizador"
           git config user.email "actions@users.noreply.github.com"
           git add data.js
-          git diff --cached --quiet || (git commit -m "Atualiza resultados" && git push)
+          git diff --cached --quiet || (git commit -m "Atualiza resultados" && git pull --rebase -q origin main && git push)
