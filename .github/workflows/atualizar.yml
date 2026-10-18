@@ -1,7 +1,7 @@
 name: Atualizar resultados
 on:
   schedule:
-    - cron: "30 2 * * *"   # 23:30 em Brasília, todo dia
+    - cron: "0 * * * *"   # de hora em hora, para pegar os sorteios que saem durante o dia
   workflow_dispatch:
 permissions:
   contents: write

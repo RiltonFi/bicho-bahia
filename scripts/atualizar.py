@@ -1,4 +1,4 @@
-# Baixa os resultados dos últimos 30 dias do site e grava data.js.
+# Baixa os resultados dos últimos 30 dias (roda de hora em hora) do site e grava data.js.
 # Mantém os dias já existentes e acrescenta/atualiza os novos.
 import json, re, datetime, urllib.request
 from html.parser import HTMLParser
