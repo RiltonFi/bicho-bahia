@@ -13,24 +13,18 @@
 <style>
 :root{
   --bg:#F2F4F7; --surface:#FFFFFF; --ink:#0B1620; --muted:#38454F; --line:#9AA7B4; --zebra:#F0F4F8;
-  --day:#0B1620; --day-ink:#FFFFFF;
-  --pt:#0B4F9C; --pt-ink:#FFFFFF; --pt-soft:#E3EEFB;
-  --ma:#8A1766; --ma-ink:#FFFFFF; --ma-soft:#F9E4F1;
-  --top:#FFE07A; --hit:#FFD23F; --focus:#B34700;
+  --day:#0B1620; --day-ink:#FFFFFF; --pt:#0B4F9C; --pt-ink:#FFFFFF; --pt-soft:#E3EEFB;
+  --ma:#8A1766; --ma-ink:#FFFFFF; --ma-soft:#F9E4F1; --top:#FFE07A; --hit:#FFD23F; --focus:#B34700;
   --f:'Atkinson Hyperlegible',Verdana,system-ui,sans-serif; --scale:1;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#0A121A; --surface:#13212D; --ink:#F4F8FC; --muted:#C3D0DC; --line:#6F8396; --zebra:#192A39;
-  --day:#F4F8FC; --day-ink:#0A121A;
-  --pt:#9CCBFF; --pt-ink:#06121F; --pt-soft:#12304D;
-  --ma:#F5A8DB; --ma-ink:#2A0A1F; --ma-soft:#42142F;
-  --top:#F2C94C; --hit:#E0A800; --focus:#FFB066; color-scheme:dark}}
+  --day:#F4F8FC; --day-ink:#0A121A; --pt:#9CCBFF; --pt-ink:#06121F; --pt-soft:#12304D;
+  --ma:#F5A8DB; --ma-ink:#2A0A1F; --ma-soft:#42142F; --top:#F2C94C; --hit:#E0A800; --focus:#FFB066; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0A121A; --surface:#13212D; --ink:#F4F8FC; --muted:#C3D0DC; --line:#6F8396; --zebra:#192A39;
-  --day:#F4F8FC; --day-ink:#0A121A;
-  --pt:#9CCBFF; --pt-ink:#06121F; --pt-soft:#12304D;
-  --ma:#F5A8DB; --ma-ink:#2A0A1F; --ma-soft:#42142F;
-  --top:#F2C94C; --hit:#E0A800; --focus:#FFB066; color-scheme:dark}
+  --day:#F4F8FC; --day-ink:#0A121A; --pt:#9CCBFF; --pt-ink:#06121F; --pt-soft:#12304D;
+  --ma:#F5A8DB; --ma-ink:#2A0A1F; --ma-soft:#42142F; --top:#F2C94C; --hit:#E0A800; --focus:#FFB066; color-scheme:dark}
 html{font-size:calc(19px * var(--scale))}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:1rem;line-height:1.45;
   padding-block:0 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
@@ -39,16 +33,20 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);font-si
   padding:16px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px));text-align:center}
 .daybar .t{font-size:.95rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.9}
 .daybar .d{font-size:1.7rem;font-weight:700;line-height:1.15;text-wrap:balance}
+.daybar .s{font-size:1rem;opacity:.9;margin-top:4px}
 h2{font-size:1.2rem;margin:0 0 10px;font-weight:700}
 .step{display:flex;flex-direction:column;gap:10px}
-.opts{display:grid;gap:10px;grid-template-columns:repeat(5,1fr)}
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x proximity}
+.days button{flex:0 0 auto;min-width:104px;scroll-snap-align:start;font-size:1.05rem;min-height:64px;line-height:1.2}
+.days button small{display:block;font-weight:400;font-size:.9rem}
+.opts{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(104px,1fr))}
 .views{display:grid;gap:10px;grid-template-columns:repeat(3,1fr)}
 button{font:700 1.15rem var(--f);color:var(--ink);background:var(--surface);border:3px solid var(--line);border-radius:12px;min-height:58px;padding:8px 6px;cursor:pointer}
 button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 button.pt[aria-pressed="true"]{background:var(--pt);color:var(--pt-ink);border-color:var(--pt)}
 button.ma[aria-pressed="true"]{background:var(--ma);color:var(--ma-ink);border-color:var(--ma)}
 button:focus-visible,input:focus-visible{outline:4px solid var(--focus);outline-offset:3px}
-@media (max-width:520px){.opts{grid-template-columns:repeat(3,1fr)}.views{grid-template-columns:1fr}}
+@media (max-width:520px){.views{grid-template-columns:1fr}}
 .pair{display:grid;gap:18px;grid-template-columns:1fr 1fr;align-items:start}
 .pair.one{grid-template-columns:1fr}
 @media (max-width:700px){.pair{grid-template-columns:1fr}}
@@ -71,6 +69,7 @@ button:focus-visible,input:focus-visible{outline:4px solid var(--focus);outline-
 .list .an{grid-column:2;color:var(--muted);font-size:1rem}
 .list li.hit,.first.hit{background:var(--hit);color:#0B1620}
 .list li.hit .an{color:#0B1620}
+.empty{padding:16px;color:var(--muted);font-size:1.05rem}
 .hint{margin:0;color:var(--muted);font-size:1.05rem}
 .field{display:flex;gap:10px;flex-wrap:wrap}
 input{flex:1 1 200px;min-width:0;font:400 1.2rem var(--f);color:var(--ink);background:var(--surface);border:3px solid var(--line);border-radius:12px;min-height:58px;padding:8px 14px}
@@ -92,17 +91,23 @@ input{flex:1 1 200px;min-width:0;font:400 1.2rem var(--f);color:var(--ink);backg
 <body>
 <div class="wrap">
   <div class="daybar" role="heading" aria-level="1">
-    <div class="t">Resultados do bicho na Bahia · de hoje</div>
-    <div class="d" id="dia">Sábado, 17 de outubro de 2026</div>
+    <div class="t">Resultados do bicho na Bahia</div>
+    <div class="d" id="dia"></div>
+    <div class="s" id="ultimo"></div>
   </div>
 
   <section class="step">
-    <h2>1. Escolha o horário do sorteio</h2>
+    <h2>1. Escolha o dia</h2>
+    <div class="days" id="days" role="group" aria-label="Dia"></div>
+  </section>
+
+  <section class="step">
+    <h2>2. Escolha o horário do sorteio</h2>
     <div class="opts" id="times" role="group" aria-label="Horário"></div>
   </section>
 
   <section class="step">
-    <h2>2. O que você quer ver?</h2>
+    <h2>3. O que você quer ver?</h2>
     <div class="views" id="views" role="group" aria-label="Loteria"></div>
   </section>
 
@@ -110,7 +115,7 @@ input{flex:1 1 200px;min-width:0;font:400 1.2rem var(--f);color:var(--ink);backg
 
   <section class="step">
     <h2>Procurar um número ou bicho</h2>
-    <label for="q" class="hint">Escreva um número (como 4400 ou 22) ou o nome de um bicho (como tigre). Ele fica marcado em amarelo nos 5 sorteios do dia.</label>
+    <label for="q" class="hint">Escreva um número (como 4400 ou 22) ou o nome de um bicho (como tigre). Procura no dia escolhido.</label>
     <div class="field">
       <input id="q" type="search" inputmode="search" autocomplete="off" placeholder="Digite aqui">
       <button type="button" id="limpar" style="flex:0 0 auto;padding-inline:22px">Limpar</button>
@@ -126,34 +131,24 @@ input{flex:1 1 200px;min-width:0;font:400 1.2rem var(--f);color:var(--ink);backg
     <button type="button" id="mais" aria-label="Aumentar a letra">A +</button>
   </div>
 
-  <p class="note">Dados copiados do site resultadofacil.com.br em 17/10/2026, às 23h. Esta página mostra só os resultados desse dia e não se atualiza sozinha. Conteúdo para maiores de 18 anos.</p>
+  <p class="note">Fonte: resultadofacil.com.br. Este app mostra resultados já copiados; eles são atualizados por uma tarefa automática no repositório. Conteúdo para maiores de 18 anos.</p>
 </div>
 
+<script src="data.js"></script>
 <script>
 const BANCAS = { pt:{nome:"Paratodos",tipo:"Loteria normal"}, ma:{nome:"Maluca",tipo:"Loteria Maluca"} };
-const DATA = {
-  pt: {
-    "10h": [[9114,4,"Borboleta"],[5110,3,"Burro"],[5594,24,"Veado"],[9322,6,"Cabra"],[8116,4,"Borboleta"],[1461,16,"Leão"],[2287,22,"Tigre"],[5864,16,"Leão"],[7866,17,"Macaco"],[3561,16,"Leão"]],
-    "12h": [[8086,22,"Tigre"],[2869,18,"Porco"],[7585,22,"Tigre"],[8368,17,"Macaco"],[6004,1,"Avestruz"],[3652,13,"Galo"],[2985,22,"Tigre"],[6244,11,"Cavalo"],[8181,21,"Touro"],[6992,23,"Urso"]],
-    "15h": [[4408,2,"Águia"],[2456,14,"Gato"],[5518,5,"Cachorro"],[4088,22,"Tigre"],[4832,8,"Camelo"],[2133,9,"Cobra"],[6879,20,"Peru"],[6115,4,"Borboleta"],[7459,15,"Jacaré"],[4087,22,"Tigre"]],
-    "19h": [[5232,8,"Camelo"],[8551,13,"Galo"],[2891,23,"Urso"],[5855,14,"Gato"],[7500,25,"Vaca"],[6821,6,"Cabra"],[9269,18,"Porco"],[6234,9,"Cobra"],[8764,16,"Leão"],[572,18,"Porco"]],
-    "21h": [[3704,1,"Avestruz"],[1304,1,"Avestruz"],[4500,25,"Vaca"],[1840,10,"Coelho"],[838,10,"Coelho"],[1757,15,"Jacaré"],[466,17,"Macaco"],[7216,4,"Borboleta"],[5287,22,"Tigre"],[6274,19,"Pavão"]]
-  },
-  ma: {
-    "10h": [[4042,11,"Cavalo"],[1192,23,"Urso"],[1153,14,"Gato"],[9559,15,"Jacaré"],[6118,5,"Cachorro"],[1746,12,"Elefante"],[6866,17,"Macaco"],[4288,22,"Tigre"],[1257,15,"Jacaré"],[1653,14,"Gato"]],
-    "12h": [[6958,15,"Jacaré"],[8686,22,"Tigre"],[853,14,"Gato"],[8278,20,"Peru"],[4006,2,"Águia"],[2541,11,"Cavalo"],[5848,12,"Elefante"],[6921,6,"Cabra"],[3268,17,"Macaco"],[2996,24,"Veado"]],
-    "15h": [[8688,22,"Tigre"],[518,5,"Cachorro"],[4450,13,"Galo"],[4254,14,"Gato"],[2384,21,"Touro"],[3959,15,"Jacaré"],[3715,4,"Borboleta"],[1814,4,"Borboleta"],[2667,17,"Macaco"],[7804,1,"Avestruz"]],
-    "19h": [[2115,4,"Borboleta"],[3595,24,"Veado"],[2588,22,"Tigre"],[5825,7,"Carneiro"],[57,15,"Jacaré"],[1944,11,"Cavalo"],[2636,9,"Cobra"],[8227,7,"Carneiro"],[6968,17,"Macaco"],[2750,13,"Galo"]],
-    "21h": [[4400,25,"Vaca"],[4,1,"Avestruz"],[7358,15,"Jacaré"],[3141,11,"Cavalo"],[8380,20,"Peru"],[7667,17,"Macaco"],[5618,5,"Cachorro"],[7422,6,"Cabra"],[1075,19,"Pavão"],[4726,7,"Carneiro"]]
-  }
-};
-const HORAS = ["10h","12h","15h","19h","21h"];
-const VIEWS = [["both","As duas"],["pt","Só Paratodos"],["ma","Só Maluca"]];
+const ORDEM = ["10h","11h Federal","12h","15h","19h","20h Federal","21h"];
+const DIAS_SEM = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+const MESES = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
 const pad = (n,l)=>String(n).padStart(l,"0");
 const norm = s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().trim();
-let hora = "21h", view = "both", q = "", scale = 1;
+const lbl = h => h.includes("Federal") ? "Federal " + h.split(" ")[0] : h;
+let dia = Object.keys(DAYS).sort().pop(), hora = "21h", view = "both", q = "", scale = 1;
 try{ const s = parseFloat(localStorage.getItem("bb-scale")); if(s>=0.9 && s<=1.5) scale = s; }catch(e){}
 function applyScale(){ document.documentElement.style.setProperty("--scale", scale); try{localStorage.setItem("bb-scale", scale)}catch(e){} }
+const dataDia = d => DAYS[d];
+const fmtDia = d => { const [y,m,dd]=d.split("-").map(Number); const w=new Date(y,m-1,dd).getDay(); return {curto:`${DIAS_SEM[w]} ${pad(dd,2)}/${pad(m,2)}`, longo:`${DIAS_SEM[w]}, ${dd} de ${MESES[m-1]} de ${y}`}; };
+function horasDo(d){ const set=new Set(); ["pt","ma"].forEach(k=>Object.keys(DAYS[d][k]||{}).forEach(h=>set.add(h))); return ORDEM.filter(h=>set.has(h)); }
 function match(row){
   if(!q.trim()) return false;
   const [m,g,a] = row, t = norm(q);
@@ -161,37 +156,53 @@ function match(row){
   return norm(a).includes(t);
 }
 function card(k){
-  const rows = DATA[k][hora], [m0,g0,a0] = rows[0], b = BANCAS[k];
+  const rows = (DAYS[dia][k]||{})[hora];
+  const b = BANCAS[k];
+  if(!rows) return `<article class="card ${k}"><div class="head"><div class="name">${b.nome}</div><div class="kind">${b.tipo}</div></div><div class="empty">Sem resultado deste sorteio neste dia.</div></article>`;
+  const [m0,g0,a0] = rows[0];
   const list = rows.slice(1).map((r,i)=>`<li class="${match(r)?"hit":""}"><span class="pos">${i+2}º</span><span class="num">${pad(r[0],4)}</span><span class="an">Grupo ${pad(r[1],2)} · ${r[2]}</span></li>`).join("");
   return `<article class="card ${k}">
     <div class="head"><div class="name">${b.nome}</div><div class="kind">${b.tipo}</div>
-      <div class="when"><span>Sorteio das ${hora}</span><span>Sáb., 17/10/2026</span></div></div>
+      <div class="when"><span>Sorteio das ${lbl(hora)}</span><span>${fmtDia(dia).curto}</span></div></div>
     <div class="first ${match(rows[0])?"hit":""}"><div class="lbl">1º prêmio</div><div class="big">${pad(m0,4)}</div><div class="an">Grupo ${pad(g0,2)} · ${a0}</div></div>
     <ul class="list">${list}</ul></article>`;
 }
 function render(){
+  const dias = Object.keys(DAYS).sort().reverse();
+  document.getElementById("days").innerHTML = dias.map(d=>`<button type="button" class="${d===dia?"":""}" aria-pressed="${d===dia}" data-d="${d}">${fmtDia(d).curto}</button>`).join("");
+  document.querySelectorAll("#days button").forEach(b=>b.onclick=()=>{dia=b.dataset.d; const hs=horasDo(dia); if(!hs.includes(hora)) hora=hs[hs.length-1]; render();});
+  const f = fmtDia(dia);
+  document.getElementById("dia").textContent = f.longo;
+  document.getElementById("ultimo").textContent = "Resultados do dia escolhido";
+
+  const hs = horasDo(dia);
+  if(!hs.includes(hora)) hora = hs[0];
   const times = document.getElementById("times"); times.innerHTML="";
-  HORAS.forEach(h=>{const b=document.createElement("button");b.type="button";b.textContent=(h===hora?"✓ ":"")+h;b.setAttribute("aria-pressed",h===hora);b.onclick=()=>{hora=h;render()};times.appendChild(b)});
+  hs.forEach(h=>{const b=document.createElement("button");b.type="button";b.textContent=(h===hora?"✓ ":"")+lbl(h);b.setAttribute("aria-pressed",h===hora);b.onclick=()=>{hora=h;render()};times.appendChild(b)});
+
   const views = document.getElementById("views"); views.innerHTML="";
-  VIEWS.forEach(([v,t])=>{const b=document.createElement("button");b.type="button";b.className=v==="both"?"":v;b.textContent=(v===view?"✓ ":"")+t;b.setAttribute("aria-pressed",v===view);b.onclick=()=>{view=v;render()};views.appendChild(b)});
+  [["both","As duas"],["pt","Só Paratodos"],["ma","Só Maluca"]].forEach(([v,t])=>{const b=document.createElement("button");b.type="button";b.className=v==="both"?"":v;b.textContent=(v===view?"✓ ":"")+t;b.setAttribute("aria-pressed",v===view);b.onclick=()=>{view=v;render()};views.appendChild(b)});
+
   const keys = view==="both" ? ["pt","ma"] : [view];
   const pair = document.getElementById("pair");
   pair.className = "pair" + (keys.length===1 ? " one" : "");
   pair.innerHTML = keys.map(card).join("");
-  const f = document.getElementById("found");
+
+  const fd = document.getElementById("found");
   if(q.trim()){
-    f.hidden=false;
-    f.innerHTML = ["pt","ma"].map(k=>{
-      const w = HORAS.filter(h=>DATA[k][h].some(match));
-      return `<div><span class="tag ${k}">${BANCAS[k].nome}</span> ${w.length ? `<mark>${q.trim()}</mark> saiu às ${w.join(", ")}.` : `não saiu hoje.`}</div>`;
+    fd.hidden=false;
+    fd.innerHTML = ["pt","ma"].map(k=>{
+      const w = hs.filter(h=>((DAYS[dia][k]||{})[h]||[]).some(match));
+      return `<div><span class="tag ${k}">${BANCAS[k].nome}</span> ${w.length ? `<mark>${q.trim()}</mark> saiu em: ${w.map(lbl).join(", ")}.` : `não saiu neste dia.`}</div>`;
     }).join("");
-  } else f.hidden = true;
+  } else fd.hidden = true;
+
   document.getElementById("freq").innerHTML = ["pt","ma"].map(k=>{
     const cnt = {};
-    Object.values(DATA[k]).forEach(d=>d.forEach(([m,g,a])=>{cnt[g]=cnt[g]||{a,n:0};cnt[g].n++}));
+    Object.values(DAYS[dia][k]||{}).forEach(d=>d.forEach(([m,g,a])=>{cnt[g]=cnt[g]||{a,n:0};cnt[g].n++}));
     const top = Object.entries(cnt).sort((x,y)=>y[1].n-x[1].n||x[0]-y[0]).slice(0,5);
-    return `<article class="card small ${k}"><div class="head"><div class="name">${BANCAS[k].nome}</div><div class="kind">Bichos que mais saíram hoje (5 sorteios)</div></div>
-      <ul class="rank">${top.map(([g,o])=>`<li><span>Grupo ${pad(g,2)} · ${o.a}</span><b>${o.n} vezes</b></li>`).join("")}</ul></article>`;
+    return `<article class="card small ${k}"><div class="head"><div class="name">${BANCAS[k].nome}</div><div class="kind">Bichos que mais saíram neste dia</div></div>
+      <ul class="rank">${top.length? top.map(([g,o])=>`<li><span>Grupo ${pad(g,2)} · ${o.a}</span><b>${o.n} vezes</b></li>`).join("") : '<li>Sem dados</li>'}</ul></article>`;
   }).join("");
 }
 document.getElementById("q").addEventListener("input",e=>{q=e.target.value;render()});
