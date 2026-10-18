@@ -93,8 +93,11 @@ def main():
                 print("ok", d)
         except Exception as e:
             print("falhou", d, e)
+    ordenado = dict(sorted(dias.items()))
     with open(DATA_JS, "w", encoding="utf-8") as f:
-        f.write("const DAYS = " + json.dumps(dict(sorted(dias.items())), ensure_ascii=False) + ";\n")
+        f.write("const DAYS = " + json.dumps(ordenado, ensure_ascii=False) + ";\n")
+    with open("dados.json", "w", encoding="utf-8") as f:
+        json.dump(ordenado, f, ensure_ascii=False, indent=1)
 
 if __name__ == "__main__":
     main()

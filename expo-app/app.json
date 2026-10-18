@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "Bicho Bahia",
+    "slug": "bicho-bahia",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#F2F4F7",
+    "android": {
+      "package": "com.rilton.bichobahia",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#0B4F9C"
+      }
+    }
+  }
+}
